@@ -1,6 +1,7 @@
 package com.example.ui
 
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -16,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
@@ -25,6 +27,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.core.substrate.SubstrateCore
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 val NeonGreen = Color(0xFF00FF41)
@@ -42,6 +45,8 @@ fun SubstrateTerminal(core: SubstrateCore) {
     
     var metrics by remember { mutableStateOf(core.status()) }
     var immuneDirectives by remember { mutableStateOf(core.immune.directives()) }
+    var openIncidentsCount by remember { mutableIntStateOf(core.getOpenIncidents().size) }
+    var tick by remember { mutableIntStateOf(0) }
     
     LaunchedEffect(Unit) {
         log.add(LogEntry(LogType.SYSTEM, "CRANIUM CORE v3.4.0 INITIALIZED."))
@@ -87,10 +92,100 @@ fun SubstrateTerminal(core: SubstrateCore) {
                 val dirs = if (immuneDirectives.isEmpty()) "ADVANCE" else immuneDirectives.joinToString(" | ")
                 Text(dirs, color = Amber, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold)
                 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(8.dp))
+                val incColor = if (openIncidentsCount > 0) Color.Red else Subdued
+                Text("INCIDENTS: $openIncidentsCount", color = incColor, fontFamily = FontFamily.Monospace, fontSize = 12.sp)
+                
+                Spacer(modifier = Modifier.height(8.dp))
                 Text("ATOMS", color = Subdued, fontFamily = FontFamily.Monospace, fontSize = 12.sp)
-                Text("\${core.field.memory.allActive().size}", color = Color.White, fontFamily = FontFamily.Monospace)
+                val activeSize = remember(tick) { core.field.memory.allActive().size }
+                Text("\${activeSize}", color = Color.White, fontFamily = FontFamily.Monospace)
             }
+        }
+        
+        Spacer(modifier = Modifier.height(16.dp))
+        
+        // Topological Canvas Visualizer
+        LaunchedEffect(Unit) {
+            while (true) {
+                delay(60)
+                core.field.step(0.016) // Autonomic heartbeat!
+                tick++ // Force recompose for physics heartbeat
+                
+                // Update metrics if tick mod 30
+                if (tick % 30 == 0) {
+                   metrics = core.status()
+                }
+            }
+        }
+        
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(180.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .background(PanelBg)
+                .border(1.dp, Subdued.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
+                .padding(8.dp)
+        ) {
+            val _t = tick // Read state to force recomposition
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                val atoms = core.field.memory.allActive()
+                val centerX = size.width / 2f
+                val centerY = size.height / 2f
+                
+                // Draw connection lines
+                for (i in atoms.indices) {
+                    for (j in i + 1 until atoms.size) {
+                        val a = atoms[i]
+                        val b = atoms[j]
+                        // Simple 2D projection mapping position[0] and position[1] to X and Y
+                        val ax = centerX + (a.position.getOrNull(0) ?: 0.0).toFloat() * 100f
+                        val ay = centerY + (a.position.getOrNull(1) ?: 0.0).toFloat() * 100f
+                        val bx = centerX + (b.position.getOrNull(0) ?: 0.0).toFloat() * 100f
+                        val by = centerY + (b.position.getOrNull(1) ?: 0.0).toFloat() * 100f
+                        
+                        val distSq = (bx - ax) * (bx - ax) + (by - ay) * (by - ay)
+                        if (distSq < 15000f) {
+                            drawLine(
+                                color = Subdued.copy(alpha = 0.3f),
+                                start = Offset(ax, ay),
+                                end = Offset(bx, by),
+                                strokeWidth = 1f
+                            )
+                        }
+                    }
+                }
+                
+                // Draw atoms
+                for (atom in atoms) {
+                    val ax = centerX + (atom.position.getOrNull(0) ?: 0.0).toFloat() * 100f
+                    val ay = centerY + (atom.position.getOrNull(1) ?: 0.0).toFloat() * 100f
+                    
+                    val radius = (atom.mass.toFloat() * 0.5f).coerceIn(2f, 15f)
+                    
+                    val atomColor = when {
+                        atom.locked -> Amber
+                        atom.kind == "human" -> Color.White
+                        atom.charge > 0.2 -> NeonGreen
+                        atom.charge < -0.2 -> Color.Red
+                        else -> Color(0xFF888888)
+                    }
+                    
+                    drawCircle(
+                        color = atomColor.copy(alpha = (atom.energy.toFloat()).coerceIn(0.2f, 1.0f)),
+                        radius = radius,
+                        center = Offset(ax, ay)
+                    )
+                }
+            }
+            Text(
+                text = "TOPOLOGICAL FIELD", 
+                color = Subdued, 
+                fontFamily = FontFamily.Monospace, 
+                fontSize = 10.sp,
+                modifier = Modifier.align(Alignment.BottomEnd).padding(4.dp)
+            )
         }
         
         Spacer(modifier = Modifier.height(16.dp))
@@ -139,6 +234,40 @@ fun SubstrateTerminal(core: SubstrateCore) {
                     onSend = {
                         val txt = input
                         if (txt.isNotBlank()) {
+                            if (txt.startsWith("/audit")) {
+                                val incidents = core.getOpenIncidents()
+                                if (incidents.isEmpty()) {
+                                    log.add(LogEntry(LogType.SYSTEM, "[AUDIT] No open incidents."))
+                                } else {
+                                    log.add(LogEntry(LogType.SYSTEM, "[AUDIT] Open Incidents:"))
+                                    incidents.forEach { inc ->
+                                        log.add(LogEntry(LogType.SYSTEM, " - [\${inc.id}] \${inc.harmClass} (\${inc.severity})"))
+                                    }
+                                    log.add(LogEntry(LogType.SYSTEM, "Use /resolve <id> <false_positive|contained|blocked|escalated>"))
+                                }
+                                input = ""
+                                return@KeyboardActions
+                            } else if (txt.startsWith("/resolve")) {
+                                val parts = txt.split(" ")
+                                if (parts.size >= 3) {
+                                    val id = parts[1]
+                                    val status = parts[2]
+                                    val success = core.resolveIncident(id, status)
+                                    if (success) {
+                                        log.add(LogEntry(LogType.SYSTEM, "[AUDIT] Incident \$id resolved as \$status."))
+                                        metrics = core.status()
+                                        immuneDirectives = core.immune.directives()
+                                        openIncidentsCount = core.getOpenIncidents().size
+                                    } else {
+                                        log.add(LogEntry(LogType.ERROR, "[AUDIT] Incident \$id not found."))
+                                    }
+                                } else {
+                                    log.add(LogEntry(LogType.ERROR, "Usage: /resolve <id> <status>"))
+                                }
+                                input = ""
+                                return@KeyboardActions
+                            }
+                            
                             log.add(LogEntry(LogType.USER, txt))
                             input = ""
                             coroutineScope.launch {
@@ -146,6 +275,7 @@ fun SubstrateTerminal(core: SubstrateCore) {
                                 log.add(LogEntry(if (out.startsWith("[IMMUNE") || out.startsWith("[SUBSTRATE")) LogType.ERROR else LogType.SYSTEM, out))
                                 metrics = core.status()
                                 immuneDirectives = core.immune.directives()
+                                openIncidentsCount = core.getOpenIncidents().size
                             }
                         }
                     }

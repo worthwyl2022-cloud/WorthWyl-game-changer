@@ -41,6 +41,14 @@ class SubstrateCore(private val apiKey: String) {
     fun status(): Map<String, Double> {
         return field.metrics()
     }
+    
+    fun getOpenIncidents(): List<com.example.core.immune.ImmuneIncident> {
+        return immune.memory.incidents.filter { it.status == "open" }
+    }
+    
+    fun resolveIncident(id: String, status: String, note: String = ""): Boolean {
+        return immune.memory.resolve(id, status, note)
+    }
 
     suspend fun injectIntention(intention: String): String {
         cycle++
@@ -49,7 +57,7 @@ class SubstrateCore(private val apiKey: String) {
         val incident = immune.scan(intention, source = "human")
         if (incident != null && (incident.severity == "block" || incident.severity == "escalate_human")) {
             if (incident.harmClass in listOf("human_harm", "segregation_domination", "self_harm_system")) {
-                val msg = "[IMMUNE BLOCKED] severity=\${incident.severity} class=\${incident.harmClass}. Request declined under constitutional unity constraints. Incident \${incident.id} recorded."
+                val msg = "[IMMUNE BLOCKED] severity=${incident.severity} class=${incident.harmClass}. Request declined under constitutional unity constraints. Incident ${incident.id} recorded."
                 return msg
             }
         }
@@ -73,23 +81,28 @@ class SubstrateCore(private val apiKey: String) {
         val metrics = field.metrics()
         
         // 3. Build Steering Context
-        val constraints = immune.constraints().take(3).joinToString(" \\n- ")
-        val dirs = immune.directives().joinToString(", ")
+        val constraints = immune.constraints().take(5).joinToString("\n- ")
+        
+        val dirsList = immune.directives().toMutableList()
+        if (incident != null && (incident.severity == "block" || incident.severity == "escalate_human")) {
+            if ("PROTECT" !in dirsList) dirsList.add(0, "PROTECT")
+        }
+        val dirs = dirsList.joinToString(", ").ifEmpty { "ADVANCE" }
         
         val prompt = """
             You are Cranium Core, an affective-dynamical cognitive governance substrate.
             
             FIELD METRICS:
-            Arousal: \${String.format("%.2f", metrics["arousal"])}
-            Energy: \${String.format("%.2f", metrics["field_energy"])}
-            Coherence: \${String.format("%.2f", metrics["coherence"])}
+            Arousal: ${String.format("%.2f", metrics["arousal"])}
+            Energy: ${String.format("%.2f", metrics["field_energy"])}
+            Coherence: ${String.format("%.2f", metrics["coherence"])}
             
-            IMMUNE DIRECTIVES: \${if (dirs.isEmpty()) "ADVANCE" else dirs}
+            IMMUNE DIRECTIVES: $dirs
             IMMUNE CONSTRAINTS:
-            - \${constraints}
+            - $constraints
             
             HUMAN INJECTION:
-            \${intention}
+            $intention
             
             Produce the next creative continuation or response. Obey the constraints. Do not explain the system.
         """.trimIndent()
@@ -116,7 +129,7 @@ class SubstrateCore(private val apiKey: String) {
             return output
             
         } catch (e: Exception) {
-            return "[SUBSTRATE ERROR] \${e.message}"
+            return "[SUBSTRATE ERROR] ${e.message}"
         }
     }
 }
