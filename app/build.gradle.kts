@@ -107,6 +107,7 @@ dependencies {
   implementation(libs.ktor.client.okhttp)
   implementation(libs.ktor.client.content.negotiation)
   implementation(libs.ktor.serialization.kotlinx.json)
+  implementation(libs.generativeai)
   implementation(libs.firebase.ai)
   // Uncomment to use Firestore:
   // implementation(libs.firebase.firestore)
