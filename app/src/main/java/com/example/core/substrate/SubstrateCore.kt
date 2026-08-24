@@ -80,6 +80,12 @@ class SubstrateCore(private val apiKey: String) {
 
         val metrics = field.metrics()
         
+        // Hybrid Retrieval: Fetch high-mass memory to ground generation
+        val topAtoms = field.memory.allActive()
+            .sortedByDescending { it.mass }
+            .take(3)
+        val contextText = topAtoms.joinToString("\n            ") { "[${it.kind.uppercase()}] ${it.content}" }
+        
         // 3. Build Steering Context
         val constraints = immune.constraints().take(5).joinToString("\n- ")
         
@@ -97,6 +103,9 @@ class SubstrateCore(private val apiKey: String) {
             Energy: ${String.format("%.2f", metrics["field_energy"])}
             Coherence: ${String.format("%.2f", metrics["coherence"])}
             
+            SUBSTRATE CONTEXT (High Mass):
+            $contextText
+            
             IMMUNE DIRECTIVES: $dirs
             IMMUNE CONSTRAINTS:
             - $constraints
@@ -112,7 +121,26 @@ class SubstrateCore(private val apiKey: String) {
             val response = generativeModel.generateContent(prompt)
             val output = response.text ?: "[Empty output]"
             
-            // Write back to quarantine
+            // 5. Post-Generation PROTECT Check
+            val outIncident = immune.scan(output, source = "generated")
+            if (outIncident != null && (outIncident.severity == "block" || outIncident.severity == "escalate_human" || outIncident.severity == "contain")) {
+                val rejectedAtom = CognitiveAtom(
+                    charge = -0.5,
+                    mass = 8.0,
+                    velocity = DoubleArray(semantic.dim),
+                    position = semantic.embed(output),
+                    tags = semantic.tagsFor(output),
+                    kind = "rejected",
+                    content = output,
+                    source = "generated",
+                    generator = "gemini",
+                    approved = false
+                )
+                field.inject(rejectedAtom)
+                return "[PROTECT BLOCKED] Substrate output hallucination violated core identity or constraints. Incident ${outIncident.id}."
+            }
+            
+            // 6. Write back to quarantine
             val outAtom = CognitiveAtom(
                 charge = 0.1,
                 mass = 5.0,

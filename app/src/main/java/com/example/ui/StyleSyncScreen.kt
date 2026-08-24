@@ -6,7 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.core.style.StyleAnalyzer
-import com.worthwyl.android.ai.StoryPersonality
+import com.example.ai.StoryPersonality
 import kotlinx.coroutines.launch
 
 @Composable

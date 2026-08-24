@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.data.local.StoryChapter
 import com.example.data.repository.StoryLocalRepository
-import com.worthwyl.android.ai.AIOrchestrator
-import com.worthwyl.android.ai.StoryPersonality
+import com.example.ai.AIOrchestrator
+import com.example.ai.StoryPersonality
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

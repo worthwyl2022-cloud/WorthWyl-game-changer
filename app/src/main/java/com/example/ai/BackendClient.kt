@@ -1,4 +1,6 @@
-package com.worthwyl.android.ai
+package com.example.ai
+
+import com.example.BuildConfig
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.okhttp.*
@@ -14,7 +16,9 @@ object BackendClient {
         }
     }
 
-    private const val BASE_URL = "http://YOURSERVER_IP:8000"
+
+
+    private val BASE_URL = BuildConfig.BACKEND_URL.ifEmpty { "http://10.0.2.2:8000" }
 
     suspend fun think(pipelineId: String, text: String, personality: StoryPersonality? = null): ThinkResponse {
         return client.post("$BASE_URL/ai/think") {

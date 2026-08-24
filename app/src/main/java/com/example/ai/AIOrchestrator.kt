@@ -1,11 +1,14 @@
-package com.worthwyl.android.ai
+package com.example.ai
 
 import com.example.data.repository.StoryLocalRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-// Note: Using a simplified constructor injection as Hilt is not currently configured.
-class AIOrchestrator(private val repo: StoryLocalRepository) {
+
+
+
+
+class AIOrchestrator constructor(private val repo: StoryLocalRepository) {
 
     fun streamResponse(
         pipelineId: String,
