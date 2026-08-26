@@ -1,90 +1,85 @@
-Wyl Mathes
-worthwyl2022-cloud · he/him
-I’m a writer, developer, and creative builder with a deep passion for code, technology, and turning ideas into real-world projects.
- 0 followers · 1 following
-worthwyl2022@gmail.com
-https://worth-wyl-media-d9ead881.base44.app
-worthwyl2022-cloud/README.md
-William "Wyl" Mathes
-Author • Entrepreneur • Nonprofit Founder • Software Architect
+# CognitiveCore
 
-📍 Las Vegas, Nevada | Born December 10, 1977
+## Creative-Governance Substrate for Long-Running Work
 
-👋 About Me
-I'm a multidisciplinary professional combining software architecture expertise with creative entrepreneurship and community impact. My work spans enterprise-grade software solutions, published fiction and self-help literature, and nonprofit leadership dedicated to community transformation.
+CognitiveCore is a documented, pre-revenue prototype for maintaining identity, canon, human intent, and memory governance across long-running creative and strategic work. Rather than treating prior conversation as undifferentiated context, the system models important material as governed memory with explicit permanence, review, and contradiction controls.
 
-Professional Focus: Building acquisition-grade, Tier 1 solutions designed for enterprise scalability and impact.
+> **Positioning.** CognitiveCore is an architecture and working substrate—not a revenue-generating SaaS product, a validated continuity product, or a demonstrated benchmark leader.
 
-🎯 Core Competencies
-Enterprise Architecture - Designing scalable systems for mission-critical applications
-Software Development - Full-stack development with emphasis on clean code and maintainability
-System Design - Efficient, well-documented solution architecture
-Cloud Infrastructure - Robust implementations in modern cloud environments
-Entrepreneurship - Founding and scaling ventures with sustainable business models
-Nonprofit Leadership - Building community-focused organizations with measurable impact
-💼 Professional & Creative Work
-📚 Published Author (Amazon Author: B0GGW47SNQ)
-Psychological Noir Series
+## Core Thesis
 
-CHASM Book One: Neon Fracture
-CHASM Book Two: Vault Breach
-Thriller Series
+Generated material should remain provisional until a human decides that it has earned a durable place in the work. This creates a governed path from intention to generation, evaluation, quarantine, human approval, and episodic memory.
 
-Shadows of Vegas
-Shadows of Vegas Book Two: Mind Tap Protocol
-Non-Fiction & Satire
+```text
+intention
+  → immune hard-block and safety checks
+  → identity-biased field retrieval
+  → canon-first lane for factual probes
+  → deliberation budget
+  → generation
+  → contradiction and output evaluation
+  → quarantine
+  → human approval or rejection
+  → episodic memory
+```
 
-Adult ADHD and Me: My Brain a Divine Chaos — Memoir & Self-Help
-Anxiety Is A Liar — Mental Health & Wellness
-With All Due Respect, Go F** Yourself* — Dark Comedy
-Audio Series (Pocket FM)
+## Implemented Concepts
 
-My Brain the Divine Chaos
-Force Recon Phantom Ops
-Dream City: Chasm
-🚀 Ventures & Partnerships
-WorthWyl Media
-Creative hub for digital storytelling, software solutions, and innovative projects.
-🌐 worth-wyl-media-d9ead881.base44.app
+| Area | Capability |
+|---|---|
+| Memory | Working, episodic, theme, identity, human, and quarantine tiers |
+| Governance | Directive steering, hard-block classes, incident memory, and explicit write-back gates |
+| Identity | Locked identity memory and identity-pressure metrics |
+| Canon | Canon-first handling for factual probes and immutable canon facts |
+| Contradiction | Lexical and paraphrase proxy with mention and endorsement gates; optional LLM-judge adapter |
+| Deliberation | Budget and temperature guidance driven by field metrics and active incidents |
+| Human control | Quarantine inbox with approve/reject promotion to episodic memory |
+| Product surface | Project isolation, constitution principles, canon ingestion, provenance, audit, and export stubs |
 
-WorthWyl Foundation
-Nonprofit organization dedicated to community development and social impact.
-❤️ worthwylfoundation.wixsite.com/worthwylfoundation
-📧 worthwylfoundation@gmail.com
+## Repository Layout
 
-WorthWyl Corp
-Business venture and consulting platform.
-🏢 worthwylcorp.wordpress.com
+| Path | Purpose |
+|---|---|
+| [`docs/ACQUISITION_ONE_PAGER.md`](docs/ACQUISITION_ONE_PAGER.md) | Honest acquisition and diligence framing |
+| [`docs/PRODUCT_MODULE.md`](docs/PRODUCT_MODULE.md) | Product boundary, project isolation, persistence, and UI mapping |
+| [`docs/JUDGE_MODULE.md`](docs/JUDGE_MODULE.md) | LLM-judge contradiction adapter and operating limits |
+| [`source/EXTRACTED_SOURCE.txt`](source/EXTRACTED_SOURCE.txt) | Text extracted from the supplied acquisition package PDF |
+| `source/` | Reserved for reconstructed source modules when verified against the original project |
 
-iENYRID Partnership
-Official nonprofit partner with iENYRID electric scooters. Supporting community mobility and sustainable transportation initiatives.
-🛴 ienyridscooter.com/pages/responsibility
+## Current Status
 
-🛠️ Technology Stack
-Languages: Python, JavaScript/TypeScript, Go, SQL
-Cloud Platforms: Azure, AWS, Google Cloud
-Frameworks & Tools: React, Node.js, Docker, Kubernetes
-Architecture Patterns: Microservices, Event-Driven, Enterprise Integration
-DevOps & Infrastructure: CI/CD, Infrastructure-as-Code, Containerization
-🤝 Connect With Me
-Platform	Link
-💻 GitHub	github.com/worthwyl2022-cloud
-📚 Amazon Author	amazon.com/stores/author/B0GGW47SNQ
-🌳 Linktree	linktr.ee/worthwyl
-📧 Development	worthwyl2022@gmail.com
-📧 Foundation	worthwylfoundation@gmail.com
-📞 Phone	702-602-3543
-🌟 Philosophy
-I believe in creating impact at scale — whether through enterprise software architecture that enables organizations to achieve their mission, or through storytelling and community work that transforms lives.
+The package documents a working prototype and its intended architecture. The supplied material records operational directives, identity-gate activity, quarantine write-back, and explicit memory governance. It does **not** establish comparative canon superiority over a naïve retrieval-augmented baseline, production-scale multi-tenancy, revenue, users, or annual recurring revenue.
 
-My commitment to acquisition-grade, Tier 1 excellence means:
+The recommended diligence posture is to treat the acquisition opportunity as the architecture, behavioral contract, and remediation path. Any claim of performance advantage should wait for a frozen corpus, real-model runs, raw outputs, reproducible methodology, and published evaluation receipts.
 
-✅ Production-ready, battle-tested implementations
-✅ Comprehensive documentation and architectural clarity
-✅ Enterprise-grade security, compliance, and reliability
-✅ Scalable solutions built for growth and sustainability
-Open to collaborating on enterprise-grade projects, literary ventures, and community-focused initiatives.
+## Quick Start for Source Review
 
-Last updated: August 25, 2026
+The original package describes a benchmark harness under `benchmark/` with a mock smoke path and an optional real-model path. Because this repository package is an editorial extraction from a PDF, executable source should be restored only after it has been checked against the authoritative upstream codebase and its dependency configuration.
 
+## Diligence Checklist
+
+Before transfer or external distribution, confirm clean title to the code, documentation, brand claims, and any third-party dependencies. Remove API keys and other secrets from local configuration and repository history. Audit the Gemini client, embedding libraries, and code lineage. Establish a defined transition and post-sale support window if the package is acquired.
+
+## Ownership and Attribution
+
+The supplied package identifies **Wyl Mathes / WorthWyl** as the source lineage. Ownership, licensing, and transfer rights should be confirmed directly with the relevant rights holder before any transaction or redistribution.
+
+## Source Note
+
+This repository package was professionally organized from the user-supplied `CognitiveCore_Acquisition_Package.pdf`. Editorial improvements clarify structure and presentation; they do not add performance claims or change the stated diligence posture.
+
+## License
+
+No license is asserted by this extracted package. Confirm title and licensing terms before use, modification, or transfer.
+
+## References
+
+[1]: source/EXTRACTED_SOURCE.txt "Extracted source text from the supplied PDF"
+
+All substantive claims in this README are derived from the supplied source package [1].
+
+> The reference above is a local repository source note rather than an external web citation.
+
+**Prepared by Manus AI**  
+**Date:** 2026-08
 
