@@ -4,6 +4,6 @@
 
 @layer base {
   body {
-    @apply bg-zinc-950 text-zinc-50 antialiased selection:bg-cyan-500/30;
+    @apply bg-black text-zinc-50 antialiased selection:bg-cyan-500/30;
   }
 }
