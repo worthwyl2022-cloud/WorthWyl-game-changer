@@ -2,7 +2,7 @@
 
 ## Snapshot
 
-- Repository: `worthwyl2022-cloud/WorthWyl-game-changer`
+- Repository: `worthwyl2022-cloud/worthwyl-game-changer`
 - Default working branch observed: `main`
 - Commit count at inventory: `31`
 - Files at inventory: `24`
