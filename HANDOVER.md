@@ -8,7 +8,7 @@ This file is an operational handover aid. It does not establish legal ownership,
 
 ## Canonical status
 
-- Canonical status: **To be confirmed in the portfolio map**.
+- Canonical status: **Supporting surface; cranium-kernel is canonical**.
 - Default branch: \">main\".
 - Repository owner at preparation time: \">worthwyl2022-cloud\".
 - Historical, experimental, generated, and demonstration material must be labeled before transfer.

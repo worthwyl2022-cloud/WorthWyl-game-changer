@@ -24,4 +24,4 @@ Record supported interfaces, adapters, providers, schemas, contracts, and config
 
 ## Canonicality decision
 
-Canonical status: **To be confirmed in the portfolio architecture map**. If this repository overlaps another repository, identify one canonical source and label the others as supporting, demonstration, migration, or archive material.
+Canonical status: **Supporting surface; cranium-kernel is the sole canonical authority source**. This repository must not define a competing authority implementation.
