@@ -86,7 +86,7 @@ export default function SubstrateTerminal() {
         throw new Error(data.error || 'Cognitive failure');
       }
       
-      // 3. Stagger logs to simulate real-time processing
+      // 3. Stagger logs to animate real-time processing
       for (let i = 0; i < data.trace.length; i++) {
         setTimeout(() => {
           setTrace(prev => [...prev, data.trace[i]]);
